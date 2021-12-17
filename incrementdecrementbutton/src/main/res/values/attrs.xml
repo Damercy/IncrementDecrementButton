@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="IncrementDecrementButton">
+        <attr name="fontSize" format="integer"/>
+        <attr name="fontFamily" format="reference"/>
+        <attr name="decrementText" format="string"/>
+        <attr name="incrementText" format="string"/>
+        <attr name="middleText" format="string"/>
+    </declare-styleable>
+</resources>

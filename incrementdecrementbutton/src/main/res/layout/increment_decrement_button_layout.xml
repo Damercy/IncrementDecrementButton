@@ -8,6 +8,7 @@
     android:weightSum="1">
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_decrement"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,6 +18,7 @@
         android:textSize="32sp" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/btn_text"
         style="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,6 +30,7 @@
         tools:text="Add" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_increment"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
