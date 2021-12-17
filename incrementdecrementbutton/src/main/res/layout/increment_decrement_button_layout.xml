@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:weightSum="1">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_decrement"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.25"
-        android:text="-"
-        android:textColor="@android:color/black"
-        android:textSize="32sp" />
+        android:orientation="horizontal"
+        android:weightSum="1">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/btn_text"
-        style="@style/TextAppearance.MaterialComponents.Body1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textSize="24sp"
-        tools:text="Add" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_decrement"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="-"
+            android:textColor="@android:color/black"
+            android:textSize="32sp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_increment"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.25"
-        android:text="+"
-        android:textColor="@android:color/black"
-        android:textSize="32sp" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/btn_text"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="24sp"
+            tools:text="Add" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_increment"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="+"
+            android:textColor="@android:color/black"
+            android:textSize="32sp" />
 
 
-</LinearLayout>
+    </LinearLayout>
+</merge>
