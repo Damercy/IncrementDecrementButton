@@ -6,5 +6,7 @@
         <attr name="decrementText" format="string"/>
         <attr name="incrementText" format="string"/>
         <attr name="middleText" format="string"/>
+        <attr name="cornerRadius" format="dimension"/>
+        <attr name="enableRipple" format="boolean"/>
     </declare-styleable>
 </resources>

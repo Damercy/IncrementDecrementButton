@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
+        android:id="@+id/btn_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -15,9 +16,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.25"
-            android:text="-"
             android:textColor="@android:color/black"
-            android:textSize="32sp" />
+            android:textSize="32sp"
+            app:rippleColor="@android:color/transparent"
+            tools:text="-" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/btn_text"
@@ -27,7 +29,6 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:textAlignment="center"
-            android:textAllCaps="true"
             android:textSize="24sp"
             tools:text="Add" />
 
@@ -37,9 +38,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.25"
-            android:text="+"
             android:textColor="@android:color/black"
-            android:textSize="32sp" />
+            android:textSize="32sp"
+            app:rippleColor="@android:color/transparent"
+            tools:text="+" />
 
 
     </LinearLayout>
