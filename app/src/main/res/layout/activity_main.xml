@@ -8,8 +8,9 @@
 
 
     <dev.dayaonweb.incrementdecrementbutton.IncrementDecrementButton
+        android:id="@+id/btn_inc_dec"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         app:incrementText="+"
         app:middleText="Hey"
         app:decrementText="-"
