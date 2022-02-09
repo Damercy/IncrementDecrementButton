@@ -4,6 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.annotation.FontRes
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textview.MaterialTextView
 
 class IncrementDecrementButton @JvmOverloads constructor(
     context: Context,
@@ -17,6 +22,10 @@ class IncrementDecrementButton @JvmOverloads constructor(
     private var decrementText: String
     private var incrementText: String
     private var middleText: String
+
+    private lateinit var btnIncrement: MaterialButton
+    private lateinit var btnDecrement: MaterialButton
+    private lateinit var btnText: MaterialTextView
 
 
     init {
@@ -39,8 +48,26 @@ class IncrementDecrementButton @JvmOverloads constructor(
         initializeIncDecButton()
     }
 
+
+    fun setFontFamily(@FontRes fontRes: Int) {
+        if (fontRes == -1) return
+        val font = ResourcesCompat.getFont(context, fontRes)
+        btnIncrement.typeface = font
+        btnDecrement.typeface = font
+        btnText.typeface = font
+        invalidateLayout()
+    }
+
     private fun initializeIncDecButton() {
-        // TODO: Add public hook functions
+        btnIncrement = findViewById(R.id.btn_increment)
+        btnDecrement = findViewById(R.id.btn_decrement)
+        btnText = findViewById(R.id.btn_text)
+        setFontFamily(fontFamily)
+    }
+
+    private fun invalidateLayout() {
+        invalidate()
+        requestLayout()
     }
 
 
