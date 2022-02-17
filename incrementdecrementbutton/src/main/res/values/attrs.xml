@@ -8,5 +8,7 @@
         <attr name="middleText" format="string"/>
         <attr name="cornerRadius" format="dimension"/>
         <attr name="enableRipple" format="boolean"/>
+        <attr name="borderStrokeColor" format="color"/>
+        <attr name="borderStrokeWidth" format="integer"/>
     </declare-styleable>
 </resources>

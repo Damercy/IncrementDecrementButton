@@ -39,7 +39,6 @@
                 android:layout_weight="0.5"
                 android:gravity="center"
                 android:textAlignment="center"
-
                 tools:text="Add" />
 
             <com.google.android.material.button.MaterialButton

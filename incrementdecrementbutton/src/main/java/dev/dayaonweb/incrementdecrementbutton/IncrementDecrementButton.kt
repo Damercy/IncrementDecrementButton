@@ -26,6 +26,8 @@ class IncrementDecrementButton @JvmOverloads constructor(
     private var fontFamily: Int
     private var fontSize: Int
     private var decrementText: String
+    private var borderStrokeWidth: Int
+    private var borderStrokeColor: Int
     private var incrementText: String
     private var middleText: String
     private var cornerRadius: Float
@@ -56,6 +58,11 @@ class IncrementDecrementButton @JvmOverloads constructor(
                 getString(R.styleable.IncrementDecrementButton_middleText) ?: DEFAULT_MIDDLE_TEXT
             cornerRadius = getDimension(R.styleable.IncrementDecrementButton_cornerRadius, 100.0f)
             enableRipple = getBoolean(R.styleable.IncrementDecrementButton_enableRipple, true)
+            borderStrokeColor = getColor(
+                R.styleable.IncrementDecrementButton_borderStrokeColor,
+                ResourcesCompat.getColor(resources, android.R.color.white, null)
+            )
+            borderStrokeWidth = getInt(R.styleable.IncrementDecrementButton_borderStrokeWidth, 0)
         }
         LayoutInflater.from(context).inflate(R.layout.increment_decrement_button_layout, this, true)
         initializeIncDecButton()
@@ -90,6 +97,16 @@ class IncrementDecrementButton @JvmOverloads constructor(
     fun setCornerRadius(@Dimension radius: Float) {
         cornerRadius = radius
         btnRoot.radius = cornerRadius
+    }
+
+    fun setBorderStrokeWidth(width: Int) {
+        borderStrokeWidth = width
+        btnRoot.strokeWidth = borderStrokeWidth
+    }
+
+    fun setBorderStrokeColor(@ColorRes color: Int) {
+        borderStrokeColor = color
+        btnRoot.strokeColor = borderStrokeColor
     }
 
 
@@ -142,6 +159,8 @@ class IncrementDecrementButton @JvmOverloads constructor(
         setDecrementButtonText(decrementText)
         setMiddleText(middleText)
         setCornerRadius(cornerRadius)
+        setBorderStrokeColor(borderStrokeColor)
+        setBorderStrokeWidth(borderStrokeWidth)
         attachListeners()
     }
 
