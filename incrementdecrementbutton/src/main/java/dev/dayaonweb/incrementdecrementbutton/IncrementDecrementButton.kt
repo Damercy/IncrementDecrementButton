@@ -1,22 +1,19 @@
 package dev.dayaonweb.incrementdecrementbutton
 
-import android.animation.ObjectAnimator
+import android.animation.Animator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
 import androidx.annotation.DrawableRes
 import androidx.annotation.FontRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.isDigitsOnly
-import androidx.core.view.ViewCompat
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.shape.CornerFamily
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
 
 class IncrementDecrementButton @JvmOverloads constructor(
@@ -24,7 +21,7 @@ class IncrementDecrementButton @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyle: Int = 0,
     defStyleRes: Int = 0
-) : LinearLayout(context, attrs, defStyle, defStyleRes) {
+) : ConstraintLayout(context, attrs, defStyle, defStyleRes) {
 
     private var fontFamily: Int
     private var fontSize: Int
@@ -32,14 +29,14 @@ class IncrementDecrementButton @JvmOverloads constructor(
     private var incrementText: String
     private var middleText: String
     private var cornerRadius: Float
-    private var shape: ShapeAppearanceModel
     private var enableRipple: Boolean
     private var value = 0
+    private var previousValue = value
 
     private lateinit var btnIncrement: MaterialButton
     private lateinit var btnDecrement: MaterialButton
     private lateinit var btnText: MaterialTextView
-    private lateinit var btnRoot: LinearLayout
+    private lateinit var btnRoot: MaterialCardView
 
 
     init {
@@ -57,9 +54,8 @@ class IncrementDecrementButton @JvmOverloads constructor(
                 ?: DEFAULT_INCREMENT_TEXT
             middleText =
                 getString(R.styleable.IncrementDecrementButton_middleText) ?: DEFAULT_MIDDLE_TEXT
-            cornerRadius = getDimension(R.styleable.IncrementDecrementButton_cornerRadius, 24.0f)
+            cornerRadius = getDimension(R.styleable.IncrementDecrementButton_cornerRadius, 100.0f)
             enableRipple = getBoolean(R.styleable.IncrementDecrementButton_enableRipple, true)
-            shape = getDefaultShape()
         }
         LayoutInflater.from(context).inflate(R.layout.increment_decrement_button_layout, this, true)
         initializeIncDecButton()
@@ -93,15 +89,7 @@ class IncrementDecrementButton @JvmOverloads constructor(
 
     fun setCornerRadius(@Dimension radius: Float) {
         cornerRadius = radius
-        val shapeAppearanceModel = getDefaultShape().withCornerSize(cornerRadius)
-        setShape(shapeAppearanceModel)
-    }
-
-    fun setShape(shapeAppearanceModel: ShapeAppearanceModel) {
-//        shape = shapeAppearanceModel
-//        val shapeDrawable = MaterialShapeDrawable(shape)
-//        ViewCompat.setBackground(btnRoot, shapeDrawable)
-//        invalidateLayout()
+        btnRoot.radius = cornerRadius
     }
 
 
@@ -144,13 +132,6 @@ class IncrementDecrementButton @JvmOverloads constructor(
     // public getters
     fun getCurrentValue() = value
 
-    fun getDefaultShape(): ShapeAppearanceModel {
-        return ShapeAppearanceModel.Builder()
-            .setAllCorners(CornerFamily.ROUNDED, cornerRadius)
-            .build()
-    }
-
-
     private fun initializeIncDecButton() {
         btnIncrement = findViewById(R.id.btn_increment)
         btnDecrement = findViewById(R.id.btn_decrement)
@@ -160,22 +141,25 @@ class IncrementDecrementButton @JvmOverloads constructor(
         setIncrementButtonText(incrementText)
         setDecrementButtonText(decrementText)
         setMiddleText(middleText)
-        setShape(shape)
+        setCornerRadius(cornerRadius)
         attachListeners()
     }
 
     private fun attachListeners() {
         btnIncrement.setOnClickListener {
+            previousValue = value
             value++
             onIncrement()
         }
         btnDecrement.setOnClickListener {
+            previousValue = value
             value--
             onDecrementRangeCheck()
         }
         btnText.setOnClickListener {
             if (btnText.text.isDigitsOnly())
                 return@setOnClickListener
+            previousValue = value
             value++
             onIncrement()
         }
@@ -183,16 +167,17 @@ class IncrementDecrementButton @JvmOverloads constructor(
 
     private fun onIncrement() {
         if (value > 0)
-            setResourceText(btnText, value.toString())
+            setResourceText(btnText, previousValue.toString())
 
     }
 
     private fun onDecrementRangeCheck() {
         if (value <= 0) {
             value = 0
+            previousValue = value
             setResourceText(btnText, middleText)
         } else
-            setResourceText(btnText, value.toString())
+            setResourceText(btnText, previousValue.toString())
     }
 
     private fun invalidateLayout() {
@@ -200,13 +185,13 @@ class IncrementDecrementButton @JvmOverloads constructor(
         requestLayout()
     }
 
-    private fun setResourceText(view: View, text: String) {
+    private fun setResourceText(view: View, text: String, shouldAnimate: Boolean = true) {
         when (view) {
-            is MaterialButton -> view.text = text
+            is MaterialButton -> view.text = if (text == "0") "" else text
             is MaterialTextView -> {
-                view.text = text
-                if (value != 0)
-                    crossFade(btnText)
+                view.text = if (text == "0") "" else text
+                if (value != 0 && shouldAnimate)
+                    translateLeftToRight(btnText)
             }
         }
         invalidateLayout()
@@ -218,6 +203,84 @@ class IncrementDecrementButton @JvmOverloads constructor(
             animate()
                 .alpha(1.0f)
                 .setDuration(500)
+                .start()
+        }
+    }
+
+    private fun translateTopToDown(view: View) {
+        val finalTranslateValue = 1000.0f
+        val initialTranslateValue = 0f
+        view.apply {
+            translationY = initialTranslateValue
+            animate()
+                .translationY(finalTranslateValue)
+                .setDuration(250)
+                .setListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(p0: Animator?) = Unit
+                    override fun onAnimationEnd(p0: Animator?) {
+                        translationY = -finalTranslateValue
+                        animate()
+                            .translationY(initialTranslateValue)
+                            .setDuration(250)
+                            .setListener(object : Animator.AnimatorListener {
+                                override fun onAnimationStart(p0: Animator?) = Unit
+                                override fun onAnimationEnd(p0: Animator?) {
+                                    setResourceText(
+                                        btnText,
+                                        value.toString(),
+                                        false
+                                    )
+                                }
+
+                                override fun onAnimationCancel(p0: Animator?) = Unit
+                                override fun onAnimationRepeat(p0: Animator?) = Unit
+                            })
+                            .start()
+                    }
+
+                    override fun onAnimationCancel(p0: Animator?) = Unit
+                    override fun onAnimationRepeat(p0: Animator?) = Unit
+
+                })
+                .start()
+        }
+    }
+
+    private fun translateLeftToRight(view: View) {
+        val finalTranslateValue = 100.0f
+        val initialTranslateValue = 0f
+        view.apply {
+            translationX = initialTranslateValue
+            animate()
+                .translationX(finalTranslateValue)
+                .setDuration(250)
+                .setListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(p0: Animator?) = Unit
+                    override fun onAnimationEnd(p0: Animator?) {
+                        translationX = -finalTranslateValue
+                        animate()
+                            .translationX(initialTranslateValue)
+                            .setDuration(250)
+                            .setListener(object : Animator.AnimatorListener {
+                                override fun onAnimationStart(p0: Animator?) = Unit
+                                override fun onAnimationEnd(p0: Animator?) {
+                                    setResourceText(
+                                        btnText,
+                                        value.toString(),
+                                        false
+                                    )
+                                }
+
+                                override fun onAnimationCancel(p0: Animator?) = Unit
+                                override fun onAnimationRepeat(p0: Animator?) = Unit
+                            })
+                            .start()
+                    }
+
+                    override fun onAnimationCancel(p0: Animator?) = Unit
+                    override fun onAnimationRepeat(p0: Animator?) = Unit
+
+                })
                 .start()
         }
     }
