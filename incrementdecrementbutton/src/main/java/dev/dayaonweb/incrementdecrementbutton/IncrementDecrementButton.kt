@@ -194,9 +194,9 @@ class IncrementDecrementButton @JvmOverloads constructor(
         if (value <= 0) {
             value = 0
             previousValue = value
-            setResourceText(btnText, middleText)
+            setResourceText(btnText, middleText, isDecrement = true)
         } else
-            setResourceText(btnText, previousValue.toString())
+            setResourceText(btnText, previousValue.toString(), isDecrement = true)
     }
 
     private fun invalidateLayout() {
@@ -204,13 +204,18 @@ class IncrementDecrementButton @JvmOverloads constructor(
         requestLayout()
     }
 
-    private fun setResourceText(view: View, text: String, shouldAnimate: Boolean = true) {
+    private fun setResourceText(
+        view: View,
+        text: String,
+        shouldAnimate: Boolean = true,
+        isDecrement: Boolean = false
+    ) {
         when (view) {
             is MaterialButton -> view.text = if (text == "0") "" else text
             is MaterialTextView -> {
                 view.text = if (text == "0") "" else text
                 if (value != 0 && shouldAnimate)
-                    translateLeftToRight(btnText)
+                   translateTopToDown(btnText,isDecrement)
             }
         }
         invalidateLayout()
@@ -226,8 +231,9 @@ class IncrementDecrementButton @JvmOverloads constructor(
         }
     }
 
-    private fun translateTopToDown(view: View) {
-        val finalTranslateValue = 1000.0f
+    private fun translateTopToDown(view: View, isDecrement: Boolean) {
+        val signPrefix = if (isDecrement) -1 else 1
+        val finalTranslateValue = signPrefix * 1000.0f
         val initialTranslateValue = 0f
         view.apply {
             translationY = initialTranslateValue
@@ -265,8 +271,9 @@ class IncrementDecrementButton @JvmOverloads constructor(
         }
     }
 
-    private fun translateLeftToRight(view: View) {
-        val finalTranslateValue = 100.0f
+    private fun translateLeftToRight(view: View, isDecrement: Boolean) {
+        val signPrefix = if (isDecrement) -1 else 1
+        val finalTranslateValue = signPrefix * 100.0f
         val initialTranslateValue = 0f
         view.apply {
             translationX = initialTranslateValue
