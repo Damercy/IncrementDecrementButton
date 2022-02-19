@@ -24,7 +24,7 @@ Step 1. Add the JitPack repository to your build file. Add it in your root build
 ```
 Step 2. Add the dependency in app's buid.gradle:
 ```groovy
-dependencies { implementation 'com.github.Damercy:IncrementDecrementButton:1.0.0' }
+dependencies { implementation 'com.github.Damercy:IncrementDecrementButton:1.1.0' }
 ```  
  
  
@@ -87,6 +87,14 @@ The following attributes are implemented as of now:
 | `app:incrementText` |   string          | The text to set for increment button. Default is `+` |
 | `app:middleText` |   string          | The text to set for the middle view. Default is `ADD` |
 | `app:fontFamilyRes` |   reference          | The font family to set for the texts |
+| `app:fontSizeRes` |   integer          | The font size to set for the texts. Defaults to 16sp |
+| `app:cornerRadius` |   dimension          | The corner radius of the button. Defaults to 8dp |
+| `app:animationType` |   enum          | The type of animation to set on text change. Either of `FADE`,`HORIZONTAL` or `VERTICAL`. Defaults to `FADE` |
+| `app:animationDuration` |   integer          | The duration for animation. Defauls to `500ms` |
+| `app:textColor` |   color          | The color to set for texts |
+| `app:buttonBackground` |   reference          | The color to set as background for button |
+| `app:borderStrokeColor` |   color          | The border stroke color to set for button. Defaults to `white` |
+| `app:borderStrokeWidth` |   integer          | The border width to set as background for button. Defaults to `0` hence no border is shown |
 
 Programatically:
 ```kotlin
