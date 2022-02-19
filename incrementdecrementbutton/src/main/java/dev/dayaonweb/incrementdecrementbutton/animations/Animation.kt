@@ -5,7 +5,7 @@ import android.view.View
 
 class Animation(
     override val targetView: View,
-    override val shouldReverse: Boolean = false,
+    override var shouldReverse: Boolean = false,
     override val duration: Long = 500L
 ) : BaseAnimation {
 

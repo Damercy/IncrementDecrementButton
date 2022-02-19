@@ -7,9 +7,10 @@
         <attr name="incrementText" format="string"/>
         <attr name="middleText" format="string"/>
         <attr name="cornerRadius" format="dimension"/>
-        <attr name="enableRipple" format="boolean"/>
         <attr name="borderStrokeColor" format="color"/>
         <attr name="borderStrokeWidth" format="integer"/>
         <attr name="animationType" format="enum"/>
+<!--        For v2.0-->
+<!--        <attr name="enableRipple" format="boolean"/>-->
     </declare-styleable>
 </resources>

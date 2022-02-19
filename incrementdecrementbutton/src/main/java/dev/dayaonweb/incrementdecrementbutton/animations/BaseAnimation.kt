@@ -6,7 +6,7 @@ import android.view.View
 interface BaseAnimation {
     val duration: Long
     val targetView: View
-    val shouldReverse: Boolean
+    var shouldReverse: Boolean
     val signPrefix: Int
         get() = if (shouldReverse) -1 else 1
 

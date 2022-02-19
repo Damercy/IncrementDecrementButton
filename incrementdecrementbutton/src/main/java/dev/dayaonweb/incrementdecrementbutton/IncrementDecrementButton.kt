@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
-import androidx.annotation.DrawableRes
 import androidx.annotation.FontRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
@@ -15,6 +14,7 @@ import androidx.core.text.isDigitsOnly
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
+import dev.dayaonweb.incrementdecrementbutton.animations.Animation
 import dev.dayaonweb.incrementdecrementbutton.animations.AnimationType
 import dev.dayaonweb.incrementdecrementbutton.util.getEnum
 
@@ -25,6 +25,7 @@ class IncrementDecrementButton @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : ConstraintLayout(context, attrs, defStyle, defStyleRes) {
 
+    // attributes
     private var fontFamily: Int
     private var fontSize: Int
     private var decrementText: String
@@ -33,15 +34,17 @@ class IncrementDecrementButton @JvmOverloads constructor(
     private var incrementText: String
     private var middleText: String
     private var cornerRadius: Float
-    private var enableRipple: Boolean
     private var animationType: AnimationType
-    private var value = 0
-    private var previousValue = value
 
+    // views
     private lateinit var btnIncrement: MaterialButton
     private lateinit var btnDecrement: MaterialButton
     private lateinit var btnText: MaterialTextView
     private lateinit var btnRoot: MaterialCardView
+
+    private var value = 0
+    private var previousValue = value
+    private var animation = Animation(btnText)
 
 
     init {
@@ -60,13 +63,13 @@ class IncrementDecrementButton @JvmOverloads constructor(
             middleText =
                 getString(R.styleable.IncrementDecrementButton_middleText) ?: DEFAULT_MIDDLE_TEXT
             cornerRadius = getDimension(R.styleable.IncrementDecrementButton_cornerRadius, 100.0f)
-            enableRipple = getBoolean(R.styleable.IncrementDecrementButton_enableRipple, true)
             borderStrokeColor = getColor(
                 R.styleable.IncrementDecrementButton_borderStrokeColor,
                 ResourcesCompat.getColor(resources, android.R.color.white, null)
             )
             borderStrokeWidth = getInt(R.styleable.IncrementDecrementButton_borderStrokeWidth, 0)
-            animationType = getEnum(R.styleable.IncrementDecrementButton_animationType,AnimationType.FADE)
+            animationType =
+                getEnum(R.styleable.IncrementDecrementButton_animationType, AnimationType.FADE)
         }
         LayoutInflater.from(context).inflate(R.layout.increment_decrement_button_layout, this, true)
         initializeIncDecButton()
@@ -115,8 +118,8 @@ class IncrementDecrementButton @JvmOverloads constructor(
 
 
     /**
-     * ****************************For release v1.2*******************************
-     */
+     * ****************************For release v2.0*******************************
+
     fun setColor(@ColorRes color: Int) {
 
     }
@@ -142,12 +145,11 @@ class IncrementDecrementButton @JvmOverloads constructor(
     }
 
     fun toggleRipple(isEnabled: Boolean) {
-        enableRipple = isEnabled
+    enableRipple = isEnabled
 
     }
 
-    /**
-     * ****************************For release v1.2*******************************
+     * ****************************For release v2.0*******************************
      */
 
     // public getters
@@ -218,21 +220,38 @@ class IncrementDecrementButton @JvmOverloads constructor(
             is MaterialButton -> view.text = if (text == "0") "" else text
             is MaterialTextView -> {
                 view.text = if (text == "0") "" else text
-                if (value != 0 && shouldAnimate)
-                   translateTopToDown(btnText,isDecrement)
+                if (value != 0 && shouldAnimate) {
+                    animation.shouldReverse = isDecrement
+                    animation.animate(animationType, getListenerForAnimation(animationType))
+                }
             }
         }
         invalidateLayout()
     }
 
 
+    private fun getListenerForAnimation(animationType: AnimationType): Animator.AnimatorListener? {
+        return when (animationType) {
+            AnimationType.FADE -> null
+            AnimationType.HORIZONTAL -> object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) = Unit
+                override fun onAnimationEnd(p0: Animator?) {
+                    setResourceText(btnText, value.toString(), false)
+                }
 
+                override fun onAnimationCancel(p0: Animator?) = Unit
+                override fun onAnimationRepeat(p0: Animator?) = Unit
+            }
+            AnimationType.VERTICAL -> object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) = Unit
+                override fun onAnimationEnd(p0: Animator?) {
+                    setResourceText(btnText, value.toString(), false)
+                }
 
-
-
-
-    private fun updateRipple(view: MaterialButton, isEnabled: Boolean) {
-        //    view.rippleColor =  // TODO: Use transparent color
+                override fun onAnimationCancel(p0: Animator?) = Unit
+                override fun onAnimationRepeat(p0: Animator?) = Unit
+            }
+        }
     }
 
 
