@@ -10,5 +10,6 @@
         <attr name="enableRipple" format="boolean"/>
         <attr name="borderStrokeColor" format="color"/>
         <attr name="borderStrokeWidth" format="integer"/>
+        <attr name="animationType" format="enum"/>
     </declare-styleable>
 </resources>

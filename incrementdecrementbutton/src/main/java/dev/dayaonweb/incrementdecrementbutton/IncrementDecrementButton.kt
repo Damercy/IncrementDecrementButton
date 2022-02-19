@@ -15,6 +15,8 @@ import androidx.core.text.isDigitsOnly
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
+import dev.dayaonweb.incrementdecrementbutton.animations.AnimationType
+import dev.dayaonweb.incrementdecrementbutton.util.getEnum
 
 class IncrementDecrementButton @JvmOverloads constructor(
     context: Context,
@@ -32,6 +34,7 @@ class IncrementDecrementButton @JvmOverloads constructor(
     private var middleText: String
     private var cornerRadius: Float
     private var enableRipple: Boolean
+    private var animationType: AnimationType
     private var value = 0
     private var previousValue = value
 
@@ -63,6 +66,7 @@ class IncrementDecrementButton @JvmOverloads constructor(
                 ResourcesCompat.getColor(resources, android.R.color.white, null)
             )
             borderStrokeWidth = getInt(R.styleable.IncrementDecrementButton_borderStrokeWidth, 0)
+            animationType = getEnum(R.styleable.IncrementDecrementButton_animationType,AnimationType.FADE)
         }
         LayoutInflater.from(context).inflate(R.layout.increment_decrement_button_layout, this, true)
         initializeIncDecButton()
@@ -221,95 +225,11 @@ class IncrementDecrementButton @JvmOverloads constructor(
         invalidateLayout()
     }
 
-    private fun crossFade(view: View) {
-        view.apply {
-            alpha = 0f
-            animate()
-                .alpha(1.0f)
-                .setDuration(500)
-                .start()
-        }
-    }
 
-    private fun translateTopToDown(view: View, isDecrement: Boolean) {
-        val signPrefix = if (isDecrement) -1 else 1
-        val finalTranslateValue = signPrefix * 1000.0f
-        val initialTranslateValue = 0f
-        view.apply {
-            translationY = initialTranslateValue
-            animate()
-                .translationY(finalTranslateValue)
-                .setDuration(250)
-                .setListener(object : Animator.AnimatorListener {
-                    override fun onAnimationStart(p0: Animator?) = Unit
-                    override fun onAnimationEnd(p0: Animator?) {
-                        translationY = -finalTranslateValue
-                        animate()
-                            .translationY(initialTranslateValue)
-                            .setDuration(250)
-                            .setListener(object : Animator.AnimatorListener {
-                                override fun onAnimationStart(p0: Animator?) = Unit
-                                override fun onAnimationEnd(p0: Animator?) {
-                                    setResourceText(
-                                        btnText,
-                                        value.toString(),
-                                        false
-                                    )
-                                }
 
-                                override fun onAnimationCancel(p0: Animator?) = Unit
-                                override fun onAnimationRepeat(p0: Animator?) = Unit
-                            })
-                            .start()
-                    }
 
-                    override fun onAnimationCancel(p0: Animator?) = Unit
-                    override fun onAnimationRepeat(p0: Animator?) = Unit
 
-                })
-                .start()
-        }
-    }
 
-    private fun translateLeftToRight(view: View, isDecrement: Boolean) {
-        val signPrefix = if (isDecrement) -1 else 1
-        val finalTranslateValue = signPrefix * 100.0f
-        val initialTranslateValue = 0f
-        view.apply {
-            translationX = initialTranslateValue
-            animate()
-                .translationX(finalTranslateValue)
-                .setDuration(250)
-                .setListener(object : Animator.AnimatorListener {
-                    override fun onAnimationStart(p0: Animator?) = Unit
-                    override fun onAnimationEnd(p0: Animator?) {
-                        translationX = -finalTranslateValue
-                        animate()
-                            .translationX(initialTranslateValue)
-                            .setDuration(250)
-                            .setListener(object : Animator.AnimatorListener {
-                                override fun onAnimationStart(p0: Animator?) = Unit
-                                override fun onAnimationEnd(p0: Animator?) {
-                                    setResourceText(
-                                        btnText,
-                                        value.toString(),
-                                        false
-                                    )
-                                }
-
-                                override fun onAnimationCancel(p0: Animator?) = Unit
-                                override fun onAnimationRepeat(p0: Animator?) = Unit
-                            })
-                            .start()
-                    }
-
-                    override fun onAnimationCancel(p0: Animator?) = Unit
-                    override fun onAnimationRepeat(p0: Animator?) = Unit
-
-                })
-                .start()
-        }
-    }
 
     private fun updateRipple(view: MaterialButton, isEnabled: Boolean) {
         //    view.rippleColor =  // TODO: Use transparent color
