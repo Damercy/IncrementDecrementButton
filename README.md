@@ -3,8 +3,10 @@
 Zomato/Swiggy like increment decrement button for android.  
 
 
-<img src="https://github.com/Damercy/IncrementDecrementButton/blob/master/screenshots/btn_basic.gif" height="500px" align="left"/>
-<img src="https://github.com/Damercy/IncrementDecrementButton/blob/master/screenshots/Screenshot_20220209_224432.png" height="500px"/>  
+<img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_vertical.gif" height="500px" align="left"/>
+<img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_horizontal.gif" height="500px" align="left"/>
+<img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_basic.gif" height="500px"/>  
+
 
 ![Kotlin](https://img.shields.io/badge/kotlin-%230095D5.svg?style=for-the-badge&logo=kotlin&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) [![GitHub license](https://badgen.net/github/license/Naereen/Strapdown.js)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE) 
 
