@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E3E3E3"
+    android:background="@color/light_gray"
     tools:context=".MainActivity">
 
 
@@ -12,11 +12,12 @@
         android:id="@+id/btn_inc_dec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:animationDuration="400"
         app:animationType="VERTICAL"
-        app:cornerRadius="8dp"
-        app:fontSizeRes="100"
-        app:fontFamilyRes="@font/shizuru_regular_400"
+        app:textColor="#fff"
+        app:buttonBackground="@color/cardview_dark_background"
+        app:borderStrokeColor="@color/white"
+        app:borderStrokeWidth="4"
+        app:animationDuration="400"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

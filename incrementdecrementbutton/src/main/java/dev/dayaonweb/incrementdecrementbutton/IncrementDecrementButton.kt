@@ -5,10 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import androidx.annotation.Dimension
-import androidx.annotation.FontRes
+import androidx.annotation.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.isDigitsOnly
@@ -18,6 +15,7 @@ import com.google.android.material.textview.MaterialTextView
 import dev.dayaonweb.incrementdecrementbutton.animations.Animation
 import dev.dayaonweb.incrementdecrementbutton.animations.AnimationType
 import dev.dayaonweb.incrementdecrementbutton.util.getEnum
+import dev.dayaonweb.incrementdecrementbutton.util.toPx
 import kotlin.time.Duration
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
@@ -68,7 +66,8 @@ class IncrementDecrementButton @JvmOverloads constructor(
                 ?: DEFAULT_INCREMENT_TEXT
             middleText =
                 getString(R.styleable.IncrementDecrementButton_middleText) ?: DEFAULT_MIDDLE_TEXT
-            cornerRadius = getDimension(R.styleable.IncrementDecrementButton_cornerRadius, 100.0f)
+            cornerRadius =
+                getDimension(R.styleable.IncrementDecrementButton_cornerRadius, DEFAULT_CORNER_SIZE)
             borderStrokeColor = getColor(
                 R.styleable.IncrementDecrementButton_borderStrokeColor,
                 ResourcesCompat.getColor(resources, android.R.color.white, null)
@@ -82,7 +81,10 @@ class IncrementDecrementButton @JvmOverloads constructor(
             animationType =
                 getEnum(R.styleable.IncrementDecrementButton_animationType, AnimationType.FADE)
             animationDuration =
-                getInt(R.styleable.IncrementDecrementButton_animationDuration, 500).toLong()
+                getInt(
+                    R.styleable.IncrementDecrementButton_animationDuration,
+                    DEFAULT_ANIMATION_DURATION
+                ).toLong()
         }
         LayoutInflater.from(context).inflate(R.layout.increment_decrement_button_layout, this, true)
         initializeIncDecButton()
@@ -99,6 +101,15 @@ class IncrementDecrementButton @JvmOverloads constructor(
         invalidateLayout()
     }
 
+    fun setFontSize(@Size size: Int) {
+        if (size < 0) return
+        fontSize = size
+        btnIncrement.textSize = fontSize.toFloat()
+        btnDecrement.textSize = fontSize.toFloat()
+        btnText.textSize = fontSize.toFloat()
+        invalidateLayout()
+    }
+
     fun setButtonBackgroundColor(@ColorRes color: Int) {
         if (color == -1) return
         background = color
@@ -107,7 +118,6 @@ class IncrementDecrementButton @JvmOverloads constructor(
     }
 
     private fun setButtonTextColor(@ColorInt color: Int) {
-        if (color == -1) return
         textColor = color
         btnIncrement.setTextColor(textColor)
         btnDecrement.setTextColor(textColor)
@@ -118,31 +128,37 @@ class IncrementDecrementButton @JvmOverloads constructor(
     fun setIncrementButtonText(text: String) {
         incrementText = text
         setResourceText(btnIncrement, incrementText)
+        invalidateLayout()
     }
 
     fun setDecrementButtonText(text: String) {
         decrementText = text
         setResourceText(btnDecrement, decrementText)
+        invalidateLayout()
     }
 
     fun setMiddleText(text: String) {
         middleText = text
         setResourceText(btnText, middleText)
+        invalidateLayout()
     }
 
     fun setCornerRadius(@Dimension radius: Float) {
         cornerRadius = radius
         btnRoot.radius = cornerRadius
+        invalidateLayout()
     }
 
     fun setBorderStrokeWidth(width: Int) {
         borderStrokeWidth = width
         btnRoot.strokeWidth = borderStrokeWidth
+        invalidateLayout()
     }
 
     fun setBorderStrokeColor(@ColorRes color: Int) {
         borderStrokeColor = color
         btnRoot.strokeColor = borderStrokeColor
+        invalidateLayout()
     }
 
     fun setAnimation(animation: AnimationType) {
@@ -204,6 +220,7 @@ class IncrementDecrementButton @JvmOverloads constructor(
         setDecrementButtonText(decrementText)
         setMiddleText(middleText)
         setButtonTextColor(textColor)
+        setFontSize(fontSize)
         setCornerRadius(cornerRadius)
         setBorderStrokeColor(borderStrokeColor)
         setBorderStrokeWidth(borderStrokeWidth)
@@ -286,6 +303,7 @@ class IncrementDecrementButton @JvmOverloads constructor(
                 override fun onAnimationEnd(p0: Animator?) {
                     setResourceText(btnText, value.toString(), false)
                 }
+
                 override fun onAnimationCancel(p0: Animator?) = Unit
                 override fun onAnimationRepeat(p0: Animator?) = Unit
             }
@@ -294,7 +312,9 @@ class IncrementDecrementButton @JvmOverloads constructor(
 
 
     companion object {
-        private const val DEFAULT_FONT_SIZE = 24
+        private const val DEFAULT_FONT_SIZE = 16
+        private val DEFAULT_CORNER_SIZE = 8.0f.toPx
+        private const val DEFAULT_ANIMATION_DURATION = 500
         private const val DEFAULT_DECREMENT_TEXT = "-"
         private const val DEFAULT_INCREMENT_TEXT = "+"
         private const val DEFAULT_MIDDLE_TEXT = "ADD"
