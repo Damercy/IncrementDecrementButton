@@ -4,9 +4,9 @@ import android.animation.Animator
 import android.view.View
 
 class Animation(
-    override val targetView: View,
+    override var targetView: View,
     override var shouldReverse: Boolean = false,
-    override val duration: Long = 500L
+    override var duration: Long = 500L
 ) : BaseAnimation {
 
     private fun crossFade(view: View) {
@@ -38,6 +38,7 @@ class Animation(
                             .setListener(listener)
                             .start()
                     }
+
                     override fun onAnimationCancel(p0: Animator?) = Unit
                     override fun onAnimationRepeat(p0: Animator?) = Unit
 

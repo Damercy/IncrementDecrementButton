@@ -18,6 +18,7 @@ import dev.dayaonweb.incrementdecrementbutton.animations.Animation
 import dev.dayaonweb.incrementdecrementbutton.animations.AnimationType
 import dev.dayaonweb.incrementdecrementbutton.util.getEnum
 
+@Suppress("MemberVisibilityCanBePrivate", "unused")
 class IncrementDecrementButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -42,9 +43,9 @@ class IncrementDecrementButton @JvmOverloads constructor(
     private lateinit var btnText: MaterialTextView
     private lateinit var btnRoot: MaterialCardView
 
-    private var value = 0
+    var value = 0
     private var previousValue = value
-    private var animation = Animation(btnText)
+    private lateinit var animation: Animation
 
 
     init {
@@ -160,6 +161,7 @@ class IncrementDecrementButton @JvmOverloads constructor(
         btnDecrement = findViewById(R.id.btn_decrement)
         btnText = findViewById(R.id.btn_text)
         btnRoot = findViewById(R.id.btn_root)
+        animation = Animation(btnText)
         setFontFamily(fontFamily)
         setIncrementButtonText(incrementText)
         setDecrementButtonText(decrementText)
