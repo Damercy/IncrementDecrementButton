@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
 import androidx.annotation.FontRes
@@ -17,6 +18,7 @@ import com.google.android.material.textview.MaterialTextView
 import dev.dayaonweb.incrementdecrementbutton.animations.Animation
 import dev.dayaonweb.incrementdecrementbutton.animations.AnimationType
 import dev.dayaonweb.incrementdecrementbutton.util.getEnum
+import kotlin.time.Duration
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 class IncrementDecrementButton @JvmOverloads constructor(
@@ -32,9 +34,12 @@ class IncrementDecrementButton @JvmOverloads constructor(
     private var decrementText: String
     private var borderStrokeWidth: Int
     private var borderStrokeColor: Int
+    private var textColor: Int
     private var incrementText: String
     private var middleText: String
     private var cornerRadius: Float
+    private var background: Int
+    private var animationDuration: Long
     private var animationType: AnimationType
 
     // views
@@ -68,9 +73,16 @@ class IncrementDecrementButton @JvmOverloads constructor(
                 R.styleable.IncrementDecrementButton_borderStrokeColor,
                 ResourcesCompat.getColor(resources, android.R.color.white, null)
             )
+            textColor = getColor(
+                R.styleable.IncrementDecrementButton_textColor,
+                ResourcesCompat.getColor(resources, android.R.color.black, null)
+            )
             borderStrokeWidth = getInt(R.styleable.IncrementDecrementButton_borderStrokeWidth, 0)
+            background = getResourceId(R.styleable.IncrementDecrementButton_buttonBackground, -1)
             animationType =
                 getEnum(R.styleable.IncrementDecrementButton_animationType, AnimationType.FADE)
+            animationDuration =
+                getInt(R.styleable.IncrementDecrementButton_animationDuration, 500).toLong()
         }
         LayoutInflater.from(context).inflate(R.layout.increment_decrement_button_layout, this, true)
         initializeIncDecButton()
@@ -84,6 +96,22 @@ class IncrementDecrementButton @JvmOverloads constructor(
         btnIncrement.typeface = font
         btnDecrement.typeface = font
         btnText.typeface = font
+        invalidateLayout()
+    }
+
+    fun setButtonBackgroundColor(@ColorRes color: Int) {
+        if (color == -1) return
+        background = color
+        btnRoot.setCardBackgroundColor(ResourcesCompat.getColor(resources, background, null))
+        invalidateLayout()
+    }
+
+    private fun setButtonTextColor(@ColorInt color: Int) {
+        if (color == -1) return
+        textColor = color
+        btnIncrement.setTextColor(textColor)
+        btnDecrement.setTextColor(textColor)
+        btnText.setTextColor(textColor)
         invalidateLayout()
     }
 
@@ -115,6 +143,14 @@ class IncrementDecrementButton @JvmOverloads constructor(
     fun setBorderStrokeColor(@ColorRes color: Int) {
         borderStrokeColor = color
         btnRoot.strokeColor = borderStrokeColor
+    }
+
+    fun setAnimation(animation: AnimationType) {
+        animationType = animation
+    }
+
+    fun setAnimationDuration(duration: Duration) {
+        animationDuration = duration.inWholeMilliseconds
     }
 
 
@@ -161,11 +197,13 @@ class IncrementDecrementButton @JvmOverloads constructor(
         btnDecrement = findViewById(R.id.btn_decrement)
         btnText = findViewById(R.id.btn_text)
         btnRoot = findViewById(R.id.btn_root)
-        animation = Animation(btnText)
+        animation = Animation(btnText, duration = animationDuration)
         setFontFamily(fontFamily)
+        setButtonBackgroundColor(background)
         setIncrementButtonText(incrementText)
         setDecrementButtonText(decrementText)
         setMiddleText(middleText)
+        setButtonTextColor(textColor)
         setCornerRadius(cornerRadius)
         setBorderStrokeColor(borderStrokeColor)
         setBorderStrokeWidth(borderStrokeWidth)
@@ -194,7 +232,10 @@ class IncrementDecrementButton @JvmOverloads constructor(
 
     private fun onIncrement() {
         if (value > 0)
-            setResourceText(btnText, previousValue.toString())
+            setResourceText(
+                btnText,
+                if (animationType != AnimationType.FADE) previousValue.toString() else value.toString()
+            )
 
     }
 
@@ -204,7 +245,11 @@ class IncrementDecrementButton @JvmOverloads constructor(
             previousValue = value
             setResourceText(btnText, middleText, isDecrement = true)
         } else
-            setResourceText(btnText, previousValue.toString(), isDecrement = true)
+            setResourceText(
+                btnText,
+                if (animationType != AnimationType.FADE) previousValue.toString() else value.toString(),
+                isDecrement = true
+            )
     }
 
     private fun invalidateLayout() {
@@ -219,11 +264,12 @@ class IncrementDecrementButton @JvmOverloads constructor(
         isDecrement: Boolean = false
     ) {
         when (view) {
-            is MaterialButton -> view.text = if (text == "0") "" else text
+            is MaterialButton -> view.text = text
             is MaterialTextView -> {
-                view.text = if (text == "0") "" else text
+                view.text = text
                 if (value != 0 && shouldAnimate) {
                     animation.shouldReverse = isDecrement
+                    animation.duration = animationDuration
                     animation.animate(animationType, getListenerForAnimation(animationType))
                 }
             }
@@ -235,21 +281,11 @@ class IncrementDecrementButton @JvmOverloads constructor(
     private fun getListenerForAnimation(animationType: AnimationType): Animator.AnimatorListener? {
         return when (animationType) {
             AnimationType.FADE -> null
-            AnimationType.HORIZONTAL -> object : Animator.AnimatorListener {
+            else -> object : Animator.AnimatorListener {
                 override fun onAnimationStart(p0: Animator?) = Unit
                 override fun onAnimationEnd(p0: Animator?) {
                     setResourceText(btnText, value.toString(), false)
                 }
-
-                override fun onAnimationCancel(p0: Animator?) = Unit
-                override fun onAnimationRepeat(p0: Animator?) = Unit
-            }
-            AnimationType.VERTICAL -> object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) = Unit
-                override fun onAnimationEnd(p0: Animator?) {
-                    setResourceText(btnText, value.toString(), false)
-                }
-
                 override fun onAnimationCancel(p0: Animator?) = Unit
                 override fun onAnimationRepeat(p0: Animator?) = Unit
             }

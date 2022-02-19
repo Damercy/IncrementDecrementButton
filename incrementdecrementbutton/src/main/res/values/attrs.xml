@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="IncrementDecrementButton">
-        <attr name="fontSizeRes" format="integer"/>
-        <attr name="fontFamilyRes" format="reference"/>
-        <attr name="decrementText" format="string"/>
-        <attr name="incrementText" format="string"/>
-        <attr name="middleText" format="string"/>
-        <attr name="cornerRadius" format="dimension"/>
-        <attr name="borderStrokeColor" format="color"/>
-        <attr name="borderStrokeWidth" format="integer"/>
-        <attr name="animationType" format="enum"/>
-<!--        For v2.0-->
-<!--        <attr name="enableRipple" format="boolean"/>-->
+        <attr name="fontSizeRes" format="integer" />
+        <attr name="fontFamilyRes" format="reference" />
+        <attr name="decrementText" format="string" />
+        <attr name="incrementText" format="string" />
+        <attr name="middleText" format="string" />
+        <attr name="cornerRadius" format="dimension" />
+        <attr name="borderStrokeColor" format="color" />
+        <attr name="textColor" format="color" />
+        <attr name="borderStrokeWidth" format="integer" />
+        <attr name="buttonBackground" format="reference"/>
+        <attr name="animationType" format="enum">
+            <enum name="FADE" value="2" />
+            <enum name="HORIZONTAL" value="1" />
+            <enum name="VERTICAL" value="0" />
+        </attr>
+        <attr name="animationDuration" format="integer"/>
+        <!--        For v2.0-->
+        <!--        <attr name="enableRipple" format="boolean"/>-->
     </declare-styleable>
 </resources>
