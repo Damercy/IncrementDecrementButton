@@ -5,17 +5,22 @@ import android.graphics.Typeface
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,59 +30,183 @@ import dev.dayaonweb.incrementdecrementbutton.animations.AnimationType
 @Composable
 fun IncrementDecrementButton(
     modifier: Modifier = Modifier,
-    decrementComposable: @Composable (Modifier) -> Unit = { DefaultDecrementComposable(it) },
-    incrementComposable: @Composable (Modifier) -> Unit = { DefaultIncrementComposable(it) },
-    middleComposable: @Composable (Modifier) -> Unit = { DefaultMiddleComposable(it) },
     fontFamily: FontFamily = FontFamily(typeface = Typeface.DEFAULT),
     fontSize: TextUnit = 16.0.sp,
-    cornerShape: Shape = RoundedCornerShape(8.dp),
+    cornerRadius: Dp = 8.dp,
     animationType: AnimationType = AnimationType.FADE,
     animationDuration: Double = 500.0,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = MaterialTheme.colors.contentColorFor(backgroundColor),
     borderStroke: BorderStroke = BorderStroke(0.dp, Color.White),
+    value: Int = 0,
+    onDecrementClick: (Int) -> Unit = {},
+    onIncrementClick: (Int) -> Unit = {},
+    onMiddleClick: (Int) -> Unit = {},
+    decrementComposable: @Composable (cb: (Int) -> Unit) -> Unit = { cb ->
+        DefaultDecrementComposable(
+            modifier = modifier,
+            textColor = contentColor,
+            fontFamily = fontFamily,
+            fontSize = fontSize,
+            backgroundColor = backgroundColor,
+            cornerRadius = cornerRadius,
+            borderStroke = borderStroke,
+            onDecrementClick = { cb(-1) }
+        )
+    },
+    incrementComposable: @Composable (cb: (Int) -> Unit) -> Unit = { cb ->
+        DefaultIncrementComposable(
+            modifier = modifier,
+            textColor = contentColor,
+            fontFamily = fontFamily,
+            fontSize = fontSize,
+            backgroundColor = backgroundColor,
+            cornerRadius = cornerRadius,
+            borderStroke = borderStroke,
+            onIncrementClick = { cb(-1) }
+        )
+    },
+    middleComposable: @Composable (Int, cb: (Int) -> Unit) -> Unit = { buttonValue, cb ->
+        DefaultMiddleComposable(
+            modifier = modifier,
+            textColor = contentColor,
+            fontFamily = fontFamily,
+            fontSize = fontSize,
+            backgroundColor = backgroundColor,
+            borderStroke = borderStroke,
+            onMiddleClick = { cb(-1) },
+            value = buttonValue
+        )
+    },
 ) {
-    val buttonModifier = modifier
-        .background(
-            color = backgroundColor,
-            shape = cornerShape
-        )
-        .border(
-            border = borderStroke,
-            shape = cornerShape
-        )
-    Row{
-        decrementComposable(buttonModifier)
-        middleComposable(buttonModifier)
-        incrementComposable(buttonModifier)
+    var buttonValue by rememberSaveable { mutableStateOf(value) }
+
+    Row {
+        decrementComposable {
+            if (buttonValue < 0)
+                buttonValue = 0
+            else
+                buttonValue--
+            onDecrementClick(buttonValue)
+        }
+        middleComposable(buttonValue) {
+            buttonValue++
+            onIncrementClick(buttonValue)
+        }
+        incrementComposable {
+            buttonValue++
+            onIncrementClick(buttonValue)
+        }
     }
 }
 
 
 @Composable
 fun DefaultDecrementComposable(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textColor: Color,
+    backgroundColor: Color,
+    fontFamily: FontFamily,
+    fontSize: TextUnit,
+    cornerRadius: Dp,
+    borderStroke: BorderStroke,
+    onDecrementClick: () -> Unit
 ) {
-    TextButton(onClick = { /*TODO*/ }, modifier = modifier) {
-        Text(text = "-")
+    val buttonModifier = modifier
+        .background(
+            color = backgroundColor,
+            shape = RoundedCornerShape(
+                topStart = cornerRadius,
+                bottomStart = cornerRadius
+            )
+        )
+        .border(
+            border = borderStroke,
+            shape = RoundedCornerShape(
+                topStart = cornerRadius,
+                bottomStart = cornerRadius
+            )
+        )
+
+    TextButton(
+        onClick = onDecrementClick,
+        contentPadding = PaddingValues(),
+        modifier = buttonModifier
+    ) {
+        Text(text = "-", color = textColor, fontFamily = fontFamily, fontSize = fontSize)
     }
 }
 
 @Composable
 fun DefaultIncrementComposable(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textColor: Color,
+    backgroundColor: Color,
+    fontFamily: FontFamily,
+    fontSize: TextUnit,
+    cornerRadius: Dp,
+    borderStroke: BorderStroke,
+    onIncrementClick: () -> Unit
 ) {
-    TextButton(onClick = { /*TODO*/ }, modifier = modifier) {
-        Text(text = "+")
+    val buttonModifier = modifier
+        .background(
+            color = backgroundColor,
+            shape = RoundedCornerShape(
+                topEnd = cornerRadius,
+                bottomEnd = cornerRadius
+            )
+        )
+        .border(
+            border = borderStroke,
+            shape = RoundedCornerShape(
+                topEnd = cornerRadius,
+                bottomEnd = cornerRadius
+            )
+        )
+
+    TextButton(
+        onClick = onIncrementClick,
+        contentPadding = PaddingValues(),
+        modifier = buttonModifier
+    ) {
+        Text(text = "+", color = textColor, fontFamily = fontFamily, fontSize = fontSize)
     }
 }
 
 @Composable
 fun DefaultMiddleComposable(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textColor: Color,
+    backgroundColor: Color,
+    fontFamily: FontFamily,
+    fontSize: TextUnit,
+    borderStroke: BorderStroke,
+    value: Int,
+    onMiddleClick: () -> Unit
 ) {
-    TextButton(onClick = { /*TODO*/ }, modifier = modifier) {
-        Text(text = "Add".toUpperCase(Locale.current))
+    val buttonModifier = modifier
+        .background(
+            color = backgroundColor,
+        )
+        .border(
+            border = borderStroke
+        )
+
+
+    TextButton(
+        onClick = onMiddleClick,
+        contentPadding = PaddingValues(),
+        modifier = buttonModifier
+    ) {
+        Text(
+            text = if (value == 0) "Add".toUpperCase(Locale.current) else value.toString()
+                .toUpperCase(
+                    Locale.current
+                ),
+            color = textColor,
+            fontFamily = fontFamily,
+            fontSize = fontSize
+        )
     }
 }
 

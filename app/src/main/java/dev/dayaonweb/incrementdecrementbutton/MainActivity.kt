@@ -3,6 +3,7 @@ package dev.dayaonweb.incrementdecrementbutton
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import dev.dayaonweb.incrementdecrementbutton.composable.IncrementDecrementButton
 
@@ -14,7 +15,9 @@ class MainActivity : AppCompatActivity() {
         composeView = findViewById(R.id.compose_view)
         composeView.setContent {
             MaterialTheme {
-                IncrementDecrementButton()
+                IncrementDecrementButton(
+                    contentColor = Color.Black
+                )
             }
         }
     }
