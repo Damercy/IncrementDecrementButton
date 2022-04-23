@@ -126,10 +126,7 @@ fun DefaultDecrementComposable(
     val buttonModifier = modifier
         .background(
             color = backgroundColor,
-            shape = RoundedCornerShape(
-                topStart = cornerRadius,
-                bottomStart = cornerRadius
-            )
+            shape = shape
         )
         .clip(
             shape = shape
