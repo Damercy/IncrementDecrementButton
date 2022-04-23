@@ -5,19 +5,26 @@ import android.graphics.Typeface
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -83,7 +90,7 @@ fun IncrementDecrementButton(
 
     Row {
         decrementComposable {
-            if (buttonValue < 0)
+            if (buttonValue <= 0)
                 buttonValue = 0
             else
                 buttonValue--
@@ -91,7 +98,7 @@ fun IncrementDecrementButton(
         }
         middleComposable(buttonValue) {
             buttonValue++
-            onIncrementClick(buttonValue)
+            onMiddleClick(buttonValue)
         }
         incrementComposable {
             buttonValue++
@@ -112,6 +119,10 @@ fun DefaultDecrementComposable(
     borderStroke: BorderStroke,
     onDecrementClick: () -> Unit
 ) {
+    val shape = RoundedCornerShape(
+        topStart = cornerRadius,
+        bottomStart = cornerRadius
+    )
     val buttonModifier = modifier
         .background(
             color = backgroundColor,
@@ -120,21 +131,27 @@ fun DefaultDecrementComposable(
                 bottomStart = cornerRadius
             )
         )
+        .clip(
+            shape = shape
+        )
+        .clickable {
+            onDecrementClick()
+        }
         .border(
             border = borderStroke,
-            shape = RoundedCornerShape(
-                topStart = cornerRadius,
-                bottomStart = cornerRadius
-            )
+            shape = shape
         )
+        .defaultMinSize(minWidth = 64.dp, minHeight = 36.dp)
+        .wrapContentHeight()
 
-    TextButton(
-        onClick = onDecrementClick,
-        contentPadding = PaddingValues(),
+    Text(
+        text = "-",
+        color = textColor,
+        fontFamily = fontFamily,
+        fontSize = fontSize,
+        textAlign = TextAlign.Center,
         modifier = buttonModifier
-    ) {
-        Text(text = "-", color = textColor, fontFamily = fontFamily, fontSize = fontSize)
-    }
+    )
 }
 
 @Composable
@@ -148,29 +165,38 @@ fun DefaultIncrementComposable(
     borderStroke: BorderStroke,
     onIncrementClick: () -> Unit
 ) {
+    val shape = RoundedCornerShape(
+        topEnd = cornerRadius,
+        bottomEnd = cornerRadius
+    )
     val buttonModifier = modifier
         .background(
             color = backgroundColor,
-            shape = RoundedCornerShape(
-                topEnd = cornerRadius,
-                bottomEnd = cornerRadius
-            )
+            shape = shape
         )
+        .clip(
+            shape = shape
+        )
+        .clickable {
+            onIncrementClick()
+        }
         .border(
             border = borderStroke,
-            shape = RoundedCornerShape(
-                topEnd = cornerRadius,
-                bottomEnd = cornerRadius
-            )
+            shape = shape
         )
+        .defaultMinSize(minWidth = 64.dp, minHeight = 36.dp)
+        .wrapContentHeight()
 
-    TextButton(
-        onClick = onIncrementClick,
-        contentPadding = PaddingValues(),
+
+    Text(
+        text = "+",
+        color = textColor,
+        fontFamily = fontFamily,
+        fontSize = fontSize,
+        textAlign = TextAlign.Center,
         modifier = buttonModifier
-    ) {
-        Text(text = "+", color = textColor, fontFamily = fontFamily, fontSize = fontSize)
-    }
+    )
+
 }
 
 @Composable
@@ -184,30 +210,32 @@ fun DefaultMiddleComposable(
     value: Int,
     onMiddleClick: () -> Unit
 ) {
+
     val buttonModifier = modifier
         .background(
             color = backgroundColor,
         )
+        .clickable {
+            onMiddleClick()
+        }
         .border(
             border = borderStroke
         )
+        .defaultMinSize(minWidth = 64.dp, minHeight = 36.dp)
+        .wrapContentHeight()
 
 
-    TextButton(
-        onClick = onMiddleClick,
-        contentPadding = PaddingValues(),
+    Text(
+        text = if (value == 0) "Add".toUpperCase(Locale.current) else value.toString()
+            .toUpperCase(
+                Locale.current
+            ),
+        color = textColor,
+        fontFamily = fontFamily,
+        fontSize = fontSize,
+        textAlign = TextAlign.Center,
         modifier = buttonModifier
-    ) {
-        Text(
-            text = if (value == 0) "Add".toUpperCase(Locale.current) else value.toString()
-                .toUpperCase(
-                    Locale.current
-                ),
-            color = textColor,
-            fontFamily = fontFamily,
-            fontSize = fontSize
-        )
-    }
+    )
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
