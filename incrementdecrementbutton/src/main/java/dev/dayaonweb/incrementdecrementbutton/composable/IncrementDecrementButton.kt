@@ -2,6 +2,7 @@ package dev.dayaonweb.incrementdecrementbutton.composable
 
 import android.annotation.SuppressLint
 import android.graphics.Typeface
+import androidx.compose.animation.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,13 +35,14 @@ import androidx.compose.ui.unit.sp
 import dev.dayaonweb.incrementdecrementbutton.animations.AnimationType
 
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun IncrementDecrementButton(
     modifier: Modifier = Modifier,
     fontFamily: FontFamily = FontFamily(typeface = Typeface.DEFAULT),
     fontSize: TextUnit = 16.0.sp,
     cornerRadius: Dp = 8.dp,
-    animationType: AnimationType = AnimationType.FADE,
+    animationType: AnimationType = AnimationType.HORIZONTAL,
     animationDuration: Double = 500.0,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = MaterialTheme.colors.contentColorFor(backgroundColor),
@@ -96,13 +98,35 @@ fun IncrementDecrementButton(
                 buttonValue--
             onDecrementClick(buttonValue)
         }
-        middleComposable(buttonValue) {
-            buttonValue++
-            onMiddleClick(buttonValue)
+        AnimatedContent(
+            targetState = buttonValue,
+            transitionSpec = {
+                getAnimationSpec(animationType, animationDuration)
+            }
+        ) { value ->
+            middleComposable(value) {
+                buttonValue++
+                onMiddleClick(value)
+            }
         }
         incrementComposable {
             buttonValue++
             onIncrementClick(buttonValue)
+        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun getAnimationSpec(animationType: AnimationType, animationDuration: Double): ContentTransform {
+    return when (animationType) {
+        AnimationType.FADE -> {
+            fadeIn() with fadeOut()
+        }
+        AnimationType.VERTICAL -> {
+            slideInVertically { it } with slideOutVertically { -it }
+        }
+        else -> {
+            slideInHorizontally { it } with slideOutHorizontally { -it }
         }
     }
 }
