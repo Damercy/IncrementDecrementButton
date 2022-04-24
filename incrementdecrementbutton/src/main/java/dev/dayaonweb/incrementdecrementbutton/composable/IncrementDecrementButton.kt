@@ -42,8 +42,7 @@ fun IncrementDecrementButton(
     fontFamily: FontFamily = FontFamily(typeface = Typeface.DEFAULT),
     fontSize: TextUnit = 16.0.sp,
     cornerRadius: Dp = 8.dp,
-    animationType: AnimationType = AnimationType.HORIZONTAL,
-    animationDuration: Double = 500.0,
+    animationType: AnimationType = AnimationType.FADE,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = MaterialTheme.colors.contentColorFor(backgroundColor),
     borderStroke: BorderStroke = BorderStroke(0.dp, Color.White),
@@ -89,9 +88,11 @@ fun IncrementDecrementButton(
     },
 ) {
     var buttonValue by rememberSaveable { mutableStateOf(value) }
+    var isDecrement by rememberSaveable { mutableStateOf(false) }
 
     Row {
         decrementComposable {
+            isDecrement = true
             if (buttonValue <= 0)
                 buttonValue = 0
             else
@@ -101,15 +102,17 @@ fun IncrementDecrementButton(
         AnimatedContent(
             targetState = buttonValue,
             transitionSpec = {
-                getAnimationSpec(animationType, animationDuration)
+                getAnimationSpec(animationType, isDecrement)
             }
         ) { value ->
             middleComposable(value) {
+                isDecrement = false
                 buttonValue++
                 onMiddleClick(value)
             }
         }
         incrementComposable {
+            isDecrement = false
             buttonValue++
             onIncrementClick(buttonValue)
         }
@@ -117,16 +120,22 @@ fun IncrementDecrementButton(
 }
 
 @OptIn(ExperimentalAnimationApi::class)
-fun getAnimationSpec(animationType: AnimationType, animationDuration: Double): ContentTransform {
+fun getAnimationSpec(
+    animationType: AnimationType,
+    isDecrement: Boolean
+): ContentTransform {
+    val inverseConstant = if (isDecrement) -1 else 1
     return when (animationType) {
         AnimationType.FADE -> {
             fadeIn() with fadeOut()
         }
         AnimationType.VERTICAL -> {
-            slideInVertically { it } with slideOutVertically { -it }
+            slideInVertically {
+                inverseConstant * it
+            } with slideOutVertically { inverseConstant * -it }
         }
         else -> {
-            slideInHorizontally { it } with slideOutHorizontally { -it }
+            slideInHorizontally { inverseConstant * it } with slideOutHorizontally { inverseConstant * -it }
         }
     }
 }

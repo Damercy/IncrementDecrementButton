@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import dev.dayaonweb.incrementdecrementbutton.animations.AnimationType
 import dev.dayaonweb.incrementdecrementbutton.composable.IncrementDecrementButton
 
 class MainActivity : AppCompatActivity() {
@@ -16,7 +17,9 @@ class MainActivity : AppCompatActivity() {
         composeView.setContent {
             MaterialTheme {
                 IncrementDecrementButton(
-                    contentColor = Color.Black
+                    contentColor = Color.Black,
+                    animationType = AnimationType.HORIZONTAL,
+
                 )
             }
         }
