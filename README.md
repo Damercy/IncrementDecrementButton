@@ -1,14 +1,17 @@
 # IncrementDecrementButton
 
-Zomato/Swiggy like increment decrement button for android.  
+Zomato/Swiggy like increment decrement button for android. Available as a composable as well as XML based view library!  
+![Kotlin](https://img.shields.io/badge/kotlin-%230095D5.svg?style=for-the-badge&logo=kotlin&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) [![GitHub license](https://badgen.net/github/license/Naereen/Strapdown.js)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE) 
 
+https://user-images.githubusercontent.com/24220261/167204923-4cd365d2-b2c7-4d49-86e0-395085591a27.mp4
+
+
+### Screenshots
 
 <img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_vertical.gif" height="500px" align="left"/>
 <img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_horizontal.gif" height="500px" align="left"/>
 <img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_basic.gif" height="500px"/>  
 
-
-![Kotlin](https://img.shields.io/badge/kotlin-%230095D5.svg?style=for-the-badge&logo=kotlin&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) [![GitHub license](https://badgen.net/github/license/Naereen/Strapdown.js)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE) 
 
 ### Requirements
 - API level 21+
@@ -45,6 +48,7 @@ rootProject.name = "Your awesome app"
 include ':app'
 ```
 ### Usage
+#### XML
 For a basic use case, you can simply plugin the library in your layout as follows:
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -114,11 +118,74 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
+#### Composable
+Simply use the composable as shown below.
+```kotlin
+   MaterialTheme {
+		// Some other composables
+                IncrementDecrementButton()
+            }
+```
+The IncrementDecrementButton is highly customizable. You can pass in your `Modifier` with appropriate styling as required or use the available methods provided. 
 
+You can even pass in your own composables for the decrement (left), middle (center) & increment (right) places of the button. The default values of IncrementDecrementButton is as follows:
+```kotlin
+@Composable
+fun IncrementDecrementButton(
+    modifier: Modifier = Modifier,
+    fontFamily: FontFamily = FontFamily(typeface = Typeface.DEFAULT),
+    fontSize: TextUnit = 16.0.sp,
+    cornerRadius: Dp = 8.dp,
+    animationType: AnimationType = AnimationType.FADE,
+    backgroundColor: Color = MaterialTheme.colors.background,
+    contentColor: Color = MaterialTheme.colors.contentColorFor(backgroundColor),
+    borderStroke: BorderStroke = BorderStroke(0.dp, Color.White),
+    value: Int = 0,
+    onDecrementClick: (Int) -> Unit = {},
+    onIncrementClick: (Int) -> Unit = {},
+    onMiddleClick: (Int) -> Unit = {},
+    decrementComposable: @Composable (cb: (Int) -> Unit) -> Unit = { cb ->
+        DefaultDecrementComposable(
+            modifier = modifier,
+            textColor = contentColor,
+            fontFamily = fontFamily,
+            fontSize = fontSize,
+            backgroundColor = backgroundColor,
+            cornerRadius = cornerRadius,
+            borderStroke = borderStroke,
+            onDecrementClick = { cb(-1) }
+        )
+    },
+    incrementComposable: @Composable (cb: (Int) -> Unit) -> Unit = { cb ->
+        DefaultIncrementComposable(
+            modifier = modifier,
+            textColor = contentColor,
+            fontFamily = fontFamily,
+            fontSize = fontSize,
+            backgroundColor = backgroundColor,
+            cornerRadius = cornerRadius,
+            borderStroke = borderStroke,
+            onIncrementClick = { cb(-1) }
+        )
+    },
+    middleComposable: @Composable (Int, cb: (Int) -> Unit) -> Unit = { buttonValue, cb ->
+        DefaultMiddleComposable(
+            modifier = modifier,
+            textColor = contentColor,
+            fontFamily = fontFamily,
+            fontSize = fontSize,
+            backgroundColor = backgroundColor,
+            borderStroke = borderStroke,
+            onMiddleClick = { cb(-1) },
+            value = buttonValue
+        )
+    },
+)
+```
 
-Please read the [release notes](https://github.com/Damercy/IncrementDecrementButton/releases/tag/1.0.0) for details on available methods & changes.
+Please read the [release notes](https://github.com/Damercy/IncrementDecrementButton/releases/tag/2.0.0) for details on available methods & changes.
 
 ### Try sample app
-You can download the [sample apk](https://github.com/Damercy/IncrementDecrementButton/releases/download/1.0.0/sample-app.apk) to see this library in action.
+You can download the [sample apk](https://github.com/Damercy/IncrementDecrementButton/releases/download/2.0.0/sample-app.apk) to see this library in action.
 
 ### Hit the ⭐ if this library helped you in your projects 😄
