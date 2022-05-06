@@ -1,6 +1,7 @@
 # IncrementDecrementButton
 
 Zomato/Swiggy like increment decrement button for android. Available as a composable as well as XML based view library!  
+
 ![Kotlin](https://img.shields.io/badge/kotlin-%230095D5.svg?style=for-the-badge&logo=kotlin&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) [![GitHub license](https://badgen.net/github/license/Naereen/Strapdown.js)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE) 
 
 https://user-images.githubusercontent.com/24220261/167204923-4cd365d2-b2c7-4d49-86e0-395085591a27.mp4
