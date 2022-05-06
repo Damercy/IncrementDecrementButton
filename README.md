@@ -187,6 +187,6 @@ fun IncrementDecrementButton(
 Please read the [release notes](https://github.com/Damercy/IncrementDecrementButton/releases/tag/2.0.0) for details on available methods & changes.
 
 ### Try sample app
-You can download the [sample apk](https://github.com/Damercy/IncrementDecrementButton/releases/download/2.0.0/sample-app.apk) to see this library in action.
+You can download the [sample apk](https://github.com/Damercy/IncrementDecrementButton/releases/download/2.0.0/sample.apk) to see this library in action.
 
 ### Hit the ⭐ if this library helped you in your projects 😄
