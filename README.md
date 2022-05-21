@@ -9,9 +9,7 @@ https://user-images.githubusercontent.com/24220261/167204923-4cd365d2-b2c7-4d49-
 
 ### Screenshots
 
-<img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_vertical.gif" height="500px" align="left"/>
-<img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_horizontal.gif" height="500px" align="left"/>
-<img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_basic.gif" height="500px"/>  
+<img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_vertical.gif" height="500px" align="left"/> <img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_horizontal.gif" height="500px" /> <img src="https://github.com/Damercy/IncrementDecrementButton/blob/2174c417b685e79ae87d74196df0c7cfaaa57e33/screenshots/btn_basic.gif" height="500px"/>  
 
 
 ### Requirements
