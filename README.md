@@ -28,7 +28,7 @@ Step 1. Add the JitPack repository to your build file. Add it in your root build
 ```
 Step 2. Add the dependency in app's buid.gradle:
 ```groovy
-dependencies { implementation 'com.github.Damercy:IncrementDecrementButton:1.1.0' }
+dependencies { implementation 'com.github.Damercy:IncrementDecrementButton:2.0.0' }
 ```  
  
  
